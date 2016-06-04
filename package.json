@@ -1,0 +1,23 @@
+{
+  "name": "snmvvm",
+  "version": "0.0.3",
+  "description": "mvvm framework",
+  "main": "snMVVM.js",
+  "scripts": {
+    "start": "gulp",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mvvm",
+    "framework"
+  ],
+  "author": "snatvb",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.12.10",
+    "gulp": "^3.9.1",
+    "gulp-browserify": "^0.5.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.3"
+  }
+}
