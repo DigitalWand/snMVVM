@@ -44,6 +44,11 @@ module.exports = function (ns) {
         return result;
     };
 
+    /**
+     * Вырезаем innerHTML
+     * @param REPEAT_DOM
+     * @private
+     */
     nsp.__cutRepeat = function (REPEAT_DOM) {
         REPEAT_DOM = REPEAT_DOM || this.__REPEAT_DOM;
         for (var i = REPEAT_DOM.length - 1; i >= 0; i--) {
@@ -53,6 +58,13 @@ module.exports = function (ns) {
         }
     };
 
+    /**
+     * Получаем repeat из переданного dom
+     * @param dom
+     * @param item
+     * @returns {*}
+     * @private
+     */
     nsp.__getChildRepeat = function (dom, item) {
         for (var i = 0; i < dom.length; i++) {
             var repeatItem = dom[i];
@@ -62,6 +74,13 @@ module.exports = function (ns) {
     };
 
 
+    /**
+     * Применение самого repeat
+     * @param REPEAT_DOM
+     * @param scope
+     * @returns {*|Array}
+     * @private
+     */
     nsp.__applyRepeat = function (REPEAT_DOM, scope) {
         REPEAT_DOM = REPEAT_DOM || this.__REPEAT_DOM;
         scope = scope || this.scope;
@@ -78,6 +97,15 @@ module.exports = function (ns) {
         return REPEAT_DOM;
     };
 
+    /**
+     * Рендерим Repeat
+     * @param element
+     * @param scope
+     * @param data
+     * @param repeatItem
+     * @returns {string}
+     * @private
+     */
     nsp.__renderRepeat = function (element, scope, data, repeatItem) {
         var textInner = '';
         if (!scope) return textInner;
@@ -93,6 +121,15 @@ module.exports = function (ns) {
         return textInner;
     };
 
+    /**
+     * Отрисовываем вложенности
+     * @param rdyDOM
+     * @param scope
+     * @param data
+     * @param repeatItem
+     * @returns {*}
+     * @private
+     */
     nsp.__insertedRepeat = function (rdyDOM, scope, data, repeatItem) {
         if (repeatItem.childRepeat) {
             for (var i = 0; i < repeatItem.childRepeat.length; i++) {
