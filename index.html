@@ -19,6 +19,19 @@
     <option value="snatvb">SnAtVB</option>
     <option value="test">Tester</option>
 </select>
+<div sn-model="testData.tester.name"></div>
+<br>
+<br>
+<hr/>
+<br>
+<br>
+<div sn-repeat="item in data">
+    <div sn-model="item.name"></div>
+    <div sn-repeat="val in item.arra">
+        <div sn-model="val"></div>
+    </div>
+</div>
+
 
 <script src="js/snMVVM.js"></script>
 </body>

@@ -6,6 +6,12 @@
 
 module.exports = {
     DIV: document.createElement("div"),
+    /**
+     * Создать событие
+     * @param eventType
+     * @param element
+     * @param fn
+     */
     addEvent: function (eventType, element, fn) {
         if (element.addEventListener) {
             element.addEventListener(eventType, fn, false);
@@ -17,6 +23,11 @@ module.exports = {
             element['on' + eventType] = fn;
         }
     },
+    /**
+     * Проверить, HTML Element это или нет
+     * @param obj
+     * @returns {boolean}
+     */
     isElement: function (obj) {
         try {
             return obj instanceof HTMLElement;
@@ -27,12 +38,50 @@ module.exports = {
                 (typeof obj.ownerDocument === "object");
         }
     },
+    /**
+     * Создать html элемент
+     * @param html
+     * @returns {Array}
+     */
     createElement: function (html) {
-        var res = [];
+        var res = [], tmp, add;
         this.DIV.innerHTML = html;
         while (this.DIV.firstChild) {
-            res[res.length] = this.DIV.removeChild(this.DIV.firstChild);
+            add = !(this.DIV.firstChild.tagName == undefined && this.DIV.firstChild.textContent.trim() == '');
+            tmp = this.DIV.removeChild(this.DIV.firstChild);
+            if(add) res.push(tmp);
         }
         return res;
+    },
+    /**
+     * Получить тескт из массива html елементов
+     * @param arr
+     * @param type
+     * @returns {*}
+     */
+    getTextFromHtml: function (arr, type) {
+        type = type || 'outer';
+        if (!(arr instanceof Array)) {
+            if(this.isElement(arr))
+                return arr.outerHeight;
+            else return;
+        }
+
+        var resultText = '';
+        for (var i = 0; i < arr.length; i++) {
+            var itemArr = arr[i];
+            if(type == 'outer') resultText += itemArr.outerHTML;
+            else resultText += itemArr.innerHTML;
+        }
+        return resultText;
+    },
+    parentByAttr: function (element, attr) {
+        if (!this.isElement((element)) || typeof attr != "string") return;
+        var nowBlock = element;
+        while(true){
+            nowBlock = nowBlock.parentNode;
+            if(!nowBlock || !this.isElement(nowBlock)) return;
+            if (nowBlock.getAttribute(attr)) return nowBlock;
+        }
     }
 };

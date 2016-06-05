@@ -75,6 +75,7 @@ var MVVM = function (scope, stgs) {
 MVVM.prototype = {
     DEFAULT_MODULE: [Version], // стандартные модули
     USER_MODULE: [],
+    __REPEAT_DOM: [], // use repeat.js
     init: function () {
         this.generateSettings();
 
@@ -83,6 +84,8 @@ MVVM.prototype = {
         /// <reference path="./loader.js"/>
         this.__loadedListModule = this.__loaderModules();
         Events.trigger('snMVVM.core.modulesLoaded');
+        /// <reference path="./repeat.js"/>
+        this.__initRepeat();
         this.__getDOM();
         if (this.stgs.createObserver) this.__observerCreate(this.BODY);
 
@@ -92,6 +95,7 @@ MVVM.prototype = {
         if (this.stgs.firstApply) {
             this.__setScopeDOM();
         } else if (!this.isEmptyScope()) this.__setScopeDOM();
+        this.__applyRepeat();
 
         if (this.stgs.bind) this.__bindListens(this.__DOM);
 
@@ -116,6 +120,7 @@ MVVM.prototype = {
     generateSettings: function () {
         var s = this.stgs;
         this.stgs = {
+            attrRepeat: s.attrRepeat || 'sn-repeat',
             attr: s.attr || 'sn-model',
             listHTML: s.listHTML || LIST_HTML,
             listVAL: s.listVAL || LIST_VAL
@@ -215,14 +220,18 @@ MVVM.prototype = {
      * Устанавливаем данные scope в DOM
      * @private
      */
-    __setScopeDOM: function () {
-        for (var i = 0; i < this.__DOM.length; i++) {
-            var itemDom = this.__DOM[i];
+    __setScopeDOM: function (DOM, scope) {
+        DOM = DOM || this.__DOM;
+        scope = scope || this.scope;
+        for (var i = 0; i < DOM.length; i++) {
+            var itemDom = DOM[i];
             var model = itemDom.getAttribute(this.stgs.attr);
-            var dataModel = this.getData(model);
+            var dataModel = this.getData(model, scope);
             if (typeof dataModel != 'undefined') this.__applyDOM(itemDom, dataModel);
             else this.__applyDOM(itemDom, '');
         }
+        return DOM;
+//        this.__applyRepeat();
     },
     /**
      * Получить данные от DOM элемента
@@ -360,9 +369,22 @@ MVVM.prototype = {
      * Для получения данных по ключу
      * @param key
      * @returns {*}
+     * @param scope
      */
-    getData: function (key) {
-        return this.scope[key];
+    getData: function (key, scope) {
+//        console.log(key, scope);
+        if(!key) return;
+        key = key.split('.');
+        scope = scope || this.scope;
+        if (key.length == 1) return scope[key];
+
+        var res = snKnife.data.clone(scope);
+        for (var i = 0; i < key.length; i++) {
+            var itemKey = key[i];
+            if (typeof res[itemKey] == 'undefined') return;
+            res = res[itemKey];
+        }
+        return res;
     },
     /**
      * Уставнока данных
