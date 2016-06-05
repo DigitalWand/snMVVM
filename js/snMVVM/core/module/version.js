@@ -11,7 +11,7 @@ var Version = function (core) {
 Version.prototype = {
     init: function () {
         this.major = 0;
-        this.minor = 2;
+        this.minor = 3;
         this.dot = 1;
         this.build = 'alpha';
     },
