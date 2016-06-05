@@ -31,5 +31,9 @@ require('./core/loader')(snMVVM);
         ]
     });
 
+    setTimeout(function () {
+        mvvm.setData('data', [{name: 'snatvb', arra: [23,423,52]}], true);
+    },1000);
+
     console.log(mvvm.version.getFull());
 })();

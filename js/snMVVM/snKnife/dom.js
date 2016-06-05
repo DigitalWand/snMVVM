@@ -43,15 +43,20 @@ module.exports = {
      * @param html
      * @returns {Array}
      */
-    createElement: function (html) {
+    createElementArray: function (html) {
         var res = [], tmp, add;
         this.DIV.innerHTML = html;
         while (this.DIV.firstChild) {
-            add = !(this.DIV.firstChild.tagName == undefined && this.DIV.firstChild.textContent.trim() == '');
+//            add = !(this.DIV.firstChild.tagName == undefined && this.DIV.firstChild.textContent.trim() == '');
             tmp = this.DIV.removeChild(this.DIV.firstChild);
-            if(add) res.push(tmp);
+            res.push(tmp);
+//            if (add) res.push(tmp);
         }
         return res;
+    },
+    createElement: function (htmlString) {
+        this.DIV.innerHTML = htmlString.trim();
+        return this.DIV.childNodes;
     },
     /**
      * Получить тескт из массива html елементов
@@ -62,7 +67,7 @@ module.exports = {
     getTextFromHtml: function (arr, type) {
         type = type || 'outer';
         if (!(arr instanceof Array)) {
-            if(this.isElement(arr))
+            if (this.isElement(arr))
                 return arr.outerHeight;
             else return;
         }
@@ -70,17 +75,17 @@ module.exports = {
         var resultText = '';
         for (var i = 0; i < arr.length; i++) {
             var itemArr = arr[i];
-            if(type == 'outer') resultText += itemArr.outerHTML;
-            else resultText += itemArr.innerHTML;
+            if (type == 'outer') resultText += itemArr.outerHTML ? itemArr.outerHTML : itemArr.textContent;
+            else resultText += itemArr.innerHTML ? itemArr.innerHTML : itemArr.textContent;
         }
         return resultText;
     },
     parentByAttr: function (element, attr) {
         if (!this.isElement((element)) || typeof attr != "string") return;
         var nowBlock = element;
-        while(true){
+        while (true) {
             nowBlock = nowBlock.parentNode;
-            if(!nowBlock || !this.isElement(nowBlock)) return;
+            if (!nowBlock || !this.isElement(nowBlock)) return;
             if (nowBlock.getAttribute(attr)) return nowBlock;
         }
     }

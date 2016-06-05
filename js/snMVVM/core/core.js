@@ -225,6 +225,7 @@ MVVM.prototype = {
         scope = scope || this.scope;
         for (var i = 0; i < DOM.length; i++) {
             var itemDom = DOM[i];
+            if(!snKnife.dom.isElement(itemDom)) continue;
             var model = itemDom.getAttribute(this.stgs.attr);
             var dataModel = this.getData(model, scope);
             if (typeof dataModel != 'undefined') this.__applyDOM(itemDom, dataModel);
@@ -412,6 +413,7 @@ MVVM.prototype = {
      */
     apply: function () {
         this.__setScopeDOM();
+        this.__applyRepeat();
     },
     /**
      * Обновить DOM
